@@ -40,7 +40,5 @@ class DeleteInactiveSites
                 }
             }
         }
-
-        dd($delete);
     }
 }

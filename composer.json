@@ -10,7 +10,8 @@
         "laravel/forge-sdk": "^3.13",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "rockero-cz/laravel-starter-kit": "^1.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
