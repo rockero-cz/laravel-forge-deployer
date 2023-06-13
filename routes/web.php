@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('webhook', WebhookController::class);
 
-Route::middleware(EnsureTokenIsValid::class)->group(function() {
+Route::middleware(EnsureTokenIsValid::class)->group(function () {
     Route::post('deploy/{repository}/{branch}', [DeployController::class, 'deployBranch']);
     Route::post('deploy/{repository}/pull/{number}', [DeployController::class, 'deployPullRequest']);
 });

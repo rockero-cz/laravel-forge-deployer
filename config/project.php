@@ -2,6 +2,6 @@
 
 return [
     'deployer' => [
-        'token' => env('DEPLOYER_TOKEN', null)
-    ]
+        'token' => env('DEPLOYER_TOKEN', null),
+    ],
 ];
