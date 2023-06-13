@@ -16,6 +16,7 @@ class DeployBranchAction
         $environment = match ($branch) {
             'main' => 'dev',
             'staging' => 'staging',
+            default => 'dev'
         };
 
         $url = "{$repository}.{$environment}." . config('services.forge.domain');

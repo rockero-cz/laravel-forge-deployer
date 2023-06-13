@@ -12,7 +12,7 @@ class Server
 {
     private Collection $sites;
     private Collection $databases;
-    private string $serverId;
+    private int $serverId;
 
     public function __construct(private Forge $forge)
     {
@@ -62,7 +62,9 @@ class Server
      */
     public function lastDeploymentAt(Site $site): ?Carbon
     {
-        $deployments = $this->forge->deploymentHistory($this->serverId, $site->id)['deployments'];
+        /** @var array */
+        $deploymentHistory = $this->forge->deploymentHistory($this->serverId, $site->id);
+        $deployments = $deploymentHistory['deployments'];
 
         return ! empty($deployments) ? Carbon::parse($deployments[0]['ended_at']) : null;
     }

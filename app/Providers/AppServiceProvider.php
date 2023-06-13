@@ -22,10 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Http::macro('github', fn () => $this
-            ->withToken(config('services.github.token'))
-            ->baseUrl('https://api.github.com')
-        );
+        Http::macro('github', function() {
+            return Http::withToken(config('services.github.token'))
+                ->baseUrl('https://api.github.com');
+        });
 
         $this->app->bind(Forge::class, function () {
             $forge = new Forge(config('services.forge.api_key'));

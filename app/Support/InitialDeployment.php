@@ -70,7 +70,7 @@ class InitialDeployment
     /**
      * Run the deployment.
      */
-    public function run()
+    public function run(): ?Site
     {
         // Create site
         $site = $this->site = $this->forge->createSite(config('services.forge.server_id'), [
