@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\DeployBranch;
-use App\Actions\DeployPullRequest;
+use App\Actions\DeployBranchAction;
+use App\Actions\DeployPullRequestAction;
 use App\Support\Server;
 
 class DeployController extends Controller
@@ -13,7 +13,7 @@ class DeployController extends Controller
      */
     public function deployBranch(Server $server, string $repository, string $branch)
     {
-        return app(DeployBranch::class)->run($server, $repository, $branch);
+        return app(DeployBranchAction::class)->run($server, $repository, $branch);
     }
 
     /**
@@ -21,6 +21,6 @@ class DeployController extends Controller
      */
     public function deployPullRequest(Server $server, string $repository, string $number)
     {
-        return app(DeployPullRequest::class)->run($server, $repository, $number);
+        return app(DeployPullRequestAction::class)->run($server, $repository, $number);
     }
 }

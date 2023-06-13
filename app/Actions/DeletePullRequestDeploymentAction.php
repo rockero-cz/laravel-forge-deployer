@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\Support\Server;
 use Illuminate\Support\Facades\Http;
 
-class DeletePullRequestDeployment
+class DeletePullRequestDeploymentAction
 {
     public function __invoke(string $repository, string|int $number)
     {
@@ -17,6 +17,7 @@ class DeletePullRequestDeployment
         $server->site($domain)?->delete();
         $server->database($pullRequest['id'])?->delete();
     }
+
     public static function run(...$arguments)
     {
         return (new self)(...$arguments);

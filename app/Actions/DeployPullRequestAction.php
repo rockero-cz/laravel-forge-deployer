@@ -6,7 +6,7 @@ use App\Support\InitialDeployment;
 use App\Support\Server;
 use Illuminate\Support\Facades\Http;
 
-class DeployPullRequest
+class DeployPullRequestAction
 {
     /**
      * Run the action.

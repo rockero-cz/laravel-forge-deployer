@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\DeletePullRequestDeployment;
+use App\Actions\DeletePullRequestDeploymentAction;
 
 class WebhookController extends Controller
 {
@@ -16,7 +16,7 @@ class WebhookController extends Controller
     private function handlePullRequestEvent()
     {
         if (request('action') === 'closed') {
-            DeletePullRequestDeployment::run(request('repository.name'), request('pull_request.number'));
+            DeletePullRequestDeploymentAction::run(request('repository.name'), request('pull_request.number'));
         }
     }
 }

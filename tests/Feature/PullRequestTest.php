@@ -20,6 +20,7 @@ class PullRequestTest extends TestCase
         config()->set('services.forge.server_id', 987);
         config()->set('services.forge.domain', 'deploy.cz');
         config()->set('services.github.owner', 'rockero-cz');
+        config()->set('project.deployer.token', 'fake-token');
 
         // Fake github response for PR details
         Http::fake([
@@ -116,6 +117,7 @@ class PullRequestTest extends TestCase
         config()->set('services.github.owner', 'rockero-cz');
         config()->set('services.forge.domain', 'deploy.com');
         config()->set('services.forge.server_id', $serverId);
+        config()->set('project.deployer.token', 'fake-token');
 
         Http::fake([
             'https://api.github.com/repos/rockero-cz/foobar/pulls/1' => Http::response([
@@ -143,6 +145,7 @@ class PullRequestTest extends TestCase
         config()->set('services.github.owner', 'rockero-cz');
         config()->set('services.forge.domain', 'deploy.com');
         config()->set('services.forge.server_id', $serverId);
+        config()->set('project.deployer.token', 'fake-token');
 
         Http::fake([
             'https://api.github.com/repos/rockero-cz/foobar/pulls/1' => Http::response([
@@ -171,6 +174,7 @@ class PullRequestTest extends TestCase
         config()->set('services.github.owner', 'rockero-cz');
         config()->set('services.forge.domain', 'deploy.com');
         config()->set('services.forge.server_id', 987);
+        config()->set('project.deployer.token', 'fake-token');
 
         $forge = $this->mock(Forge::class);
 

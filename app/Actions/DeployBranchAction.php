@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\Support\InitialDeployment;
 use App\Support\Server;
 
-class DeployBranch
+class DeployBranchAction
 {
     /**
      * Run the action.
