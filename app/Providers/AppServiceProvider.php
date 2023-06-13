@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Http::macro('github', function() {
+        Http::macro('github', function () {
             return Http::withToken(config('services.github.token'))
                 ->baseUrl('https://api.github.com');
         });
