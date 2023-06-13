@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Http;
 
 class DeployPullRequest
 {
-    public function __invoke(Server $server, string $repository, string|int $number)
+    /**
+     * Run the action.
+     */
+    public function run(Server $server, string $repository, string|int $number)
     {
-        $pullRequest = Http::github()->get('repos/rockero-cz/' . $repository . '/pulls/' . $number)->json();
+        $pullRequest = Http::github()->get('repos/' . config('services.github.owner') . '/' . $repository . '/pulls/' . $number)->json();
 
         $domain = $pullRequest['id'] . '.dev.' . config('services.forge.domain');
 
@@ -35,6 +38,6 @@ class DeployPullRequest
         $initialDeployment->run();
 
         // Post comment with domain on the github PR
-        Http::github()->post("repos/rockero-cz/{$repository}/issues/{$number}/comments", ['body' => "https://{$domain}"]);
+        Http::github()->post("repos/" . config('services.github.owner') . "/{$repository}/issues/{$number}/comments", ['body' => "https://{$domain}"]);
     }
 }

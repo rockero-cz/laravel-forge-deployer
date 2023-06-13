@@ -9,7 +9,7 @@ class DeletePullRequestDeployment
 {
     public function __invoke(string $repository, string|int $number)
     {
-        $pullRequest = Http::github()->get('repos/rockero-cz/' . $repository . '/pulls/' . $number)->json();
+        $pullRequest = Http::github()->get('repos/' . config('services.github.owner') . '/' . $repository . '/pulls/' . $number)->json();
 
         $domain = $pullRequest['id'] . '.dev.' . config('services.forge.domain');
 

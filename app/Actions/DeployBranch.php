@@ -7,7 +7,10 @@ use App\Support\Server;
 
 class DeployBranch
 {
-    public function __invoke(Server $server, string $repository, string $branch)
+    /**
+     * Run the action.
+     */
+    public function run(Server $server, string $repository, string $branch)
     {
         $stage = match ($branch) {
             'main' => 'dev',

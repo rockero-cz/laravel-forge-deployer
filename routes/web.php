@@ -1,7 +1,6 @@
 <?php
 
-use App\Actions\DeployBranch;
-use App\Actions\DeployPullRequest;
+use App\Http\Controllers\DeployController;
 use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,10 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('webhook', WebhookController::class);
 
 // Route::middleware(EnsureTokenIsValid::class)->group(function() {
-
-Route::post('deploy/{repository}/{branch}', DeployBranch::class);
-Route::post('deploy/{repository}/pull/{number}', DeployPullRequest::class);
-
-// Route::post('deploy', DeployApplication::class);
-
+Route::post('deploy/{repository}/{branch}', [DeployController::class, 'deployBranch']);
+Route::post('deploy/{repository}/pull/{number}', [DeployController::class, 'deployPullRequest']);
 // });
