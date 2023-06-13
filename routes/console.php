@@ -1,11 +1,7 @@
 <?php
 
-use App\Actions\DeletePullRequestDeployment;
-use App\Actions\DeployBranch;
-use App\Actions\DeployPullRequest;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------

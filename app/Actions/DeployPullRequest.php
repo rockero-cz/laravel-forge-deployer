@@ -38,6 +38,6 @@ class DeployPullRequest
         $initialDeployment->run();
 
         // Post comment with domain on the github PR
-        Http::github()->post("repos/" . config('services.github.owner') . "/{$repository}/issues/{$number}/comments", ['body' => "https://{$domain}"]);
+        Http::github()->post('repos/' . config('services.github.owner') . "/{$repository}/issues/{$number}/comments", ['body' => "https://{$domain}"]);
     }
 }
