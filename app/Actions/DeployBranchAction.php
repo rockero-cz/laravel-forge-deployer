@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\Support\InitialDeployment;
 use App\Support\Server;
 use Laravel\Forge\Resources\Site;
 

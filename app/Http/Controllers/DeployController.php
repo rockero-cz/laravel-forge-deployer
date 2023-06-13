@@ -16,7 +16,7 @@ class DeployController extends Controller
     {
         $site = app(DeployBranchAction::class)->run($server, $repository, $branch);
 
-        if (!$site) {
+        if (! $site) {
             return response()->json(['success' => false], 409);
         }
 
