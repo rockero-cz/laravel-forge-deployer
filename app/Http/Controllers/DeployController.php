@@ -26,8 +26,14 @@ class DeployController extends Controller
     /**
      * Handle deployment of the given pull request.
      */
-    public function deployPullRequest(Server $server, string $repository, string $number)
+    public function deployPullRequest(Server $server, string $repository, string $number): JsonResponse
     {
-        return app(DeployPullRequestAction::class)->run($server, $repository, $number);
+        $site = app(DeployPullRequestAction::class)->run($server, $repository, $number);
+
+        if (! $site) {
+            return response()->json(['success' => false], 409);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

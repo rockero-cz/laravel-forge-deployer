@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Support\InitialDeployment;
 use App\Support\Server;
 use Laravel\Forge\Resources\Site;
 
@@ -24,6 +25,24 @@ class DeployBranchAction
             return $site->deploySite();
         }
 
-        return app(InitialDeployAction::class)->run($url, $database, $repository, $branch);
+        $initialDeployment = new InitialDeployment($url, $database, $repository, $branch);
+
+        return $this->initialDeploy($initialDeployment, $branch);
+    }
+
+    /**
+     * Handle initial deployment.
+     */
+    private function initialDeploy(InitialDeployment $initialDeployment, string|int $branch): ?Site
+    {
+        $initialDeployment->script([
+            'git reset --hard && git clean -df',
+            "git pull origin {$branch}",
+            '$FORGE_COMPOSER install --no-interaction --prefer-dist --optimize-autoloader',
+            '$FORGE_PHP artisan migrate --force',
+            '$FORGE_PHP artisan queue:restart',
+        ]);
+
+        return $initialDeployment->run();
     }
 }

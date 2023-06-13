@@ -165,7 +165,7 @@ class PullRequestTest extends TestCase
             ->withArgs([$serverId])
             ->andReturn([$site]);
 
-        $this->withHeaders(['Authorization' => 'Bearer fake-token'])->post('deploy/foobar/pull/1')->assertStatus(500);
+        $this->withHeaders(['Authorization' => 'Bearer fake-token'])->post('deploy/foobar/pull/1')->assertStatus(409);
     }
 
     /** @test */
