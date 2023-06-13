@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\DeployController;
-use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\EnsureTokenIsValid;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::post('webhook', WebhookController::class);
 
 Route::middleware(EnsureTokenIsValid::class)->group(function () {
     Route::post('deploy/{repository}/{branch}', [DeployController::class, 'deployBranch']);
