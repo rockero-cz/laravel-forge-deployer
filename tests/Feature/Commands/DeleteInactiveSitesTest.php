@@ -8,7 +8,7 @@ use Laravel\Forge\Resources\Site;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
-class DelteInactiveSitesTest extends TestCase
+class DeleteInactiveSitesTest extends TestCase
 {
     protected Forge|MockInterface $forge;
 
