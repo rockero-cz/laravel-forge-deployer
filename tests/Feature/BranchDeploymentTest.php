@@ -120,7 +120,7 @@ class BranchDeploymentTest extends TestCase
     }
 
     /** @test */
-    public function returns_500_when_subsequent_deployment_is_unsuccessful()
+    public function returns_409_when_subsequent_deployment_is_unsuccessful()
     {
         $serverId = 987;
 
@@ -137,7 +137,7 @@ class BranchDeploymentTest extends TestCase
 
         $forge->shouldReceive('sites')->withArgs([$serverId])->andReturn([$site]);
 
-        $this->post('deploy/foobar/main')->assertStatus(500);
+        $this->post('deploy/foobar/main')->assertStatus(409);
     }
 
     /** @test */

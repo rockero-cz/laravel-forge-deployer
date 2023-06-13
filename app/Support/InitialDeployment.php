@@ -127,6 +127,8 @@ class InitialDeployment
         if ($this->postDeployCommand) {
             $this->forge->executeSiteCommand($site->serverId, $site->id, ['command' => $this->postDeployCommand]);
         }
+
+        return $site;
     }
 
     public function ensureSiteIsDeployed(): void

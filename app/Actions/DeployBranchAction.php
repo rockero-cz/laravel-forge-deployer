@@ -4,43 +4,30 @@ namespace App\Actions;
 
 use App\Support\InitialDeployment;
 use App\Support\Server;
+use Laravel\Forge\Resources\Site;
 
 class DeployBranchAction
 {
     /**
      * Run the action.
      */
-    public function run(Server $server, string $repository, string $branch)
+    public function run(Server $server, string $repository, string $branch): ?Site
     {
-        $stage = match ($branch) {
+        $environment = match ($branch) {
             'main' => 'dev',
             'staging' => 'staging',
         };
 
         // foo-bar.dev.rockero.cz
-        $domain = "{$repository}.{$stage}." . config('services.forge.domain');
+        $url = "{$repository}.{$environment}." . config('services.forge.domain');
 
-        if ($site = $server->site($domain)) {
-            $result = $site->deploySite();
-
-            abort_if(is_null($result), 500);
-
-            return;
+        if ($site = $server->site($url)) {
+            return $site->deploySite();
         }
 
         // dev_foo_bar
-        $database = $stage . '_' . str_replace('-', '_', $repository);
+        $database = $environment . '_' . str_replace('-', '_', $repository);
 
-        $initialDeployment = new InitialDeployment($domain, $database, $repository, $branch);
-
-        $initialDeployment->script([
-            'git reset --hard && git clean -df',
-            "git pull origin {$branch}",
-            '$FORGE_COMPOSER install --no-interaction --prefer-dist --optimize-autoloader',
-            '$FORGE_PHP artisan migrate --force',
-            '$FORGE_PHP artisan queue:restart',
-        ]);
-
-        $initialDeployment->run();
+        return app(InitialDeployAction::class)->run($url, $database, $repository, $branch);
     }
 }
