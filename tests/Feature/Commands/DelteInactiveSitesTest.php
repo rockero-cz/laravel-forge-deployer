@@ -4,9 +4,9 @@ namespace Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Http;
 use Laravel\Forge\Forge;
+use Laravel\Forge\Resources\Site;
 use Mockery\MockInterface;
 use Tests\TestCase;
-use Laravel\Forge\Resources\Site;
 
 class DelteInactiveSitesTest extends TestCase
 {

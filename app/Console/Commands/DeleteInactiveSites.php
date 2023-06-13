@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Support\Server;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class DeleteInactiveSites extends Command
 {
@@ -43,7 +43,7 @@ class DeleteInactiveSites extends Command
         $sites = $server->sites();
         $delete = collect([]);
 
-        if (!$sites) {
+        if (! $sites) {
             return;
         }
 
@@ -52,13 +52,13 @@ class DeleteInactiveSites extends Command
 
             // The deployment is for the pull request
             if (is_numeric($splittedName[0])) {
-                $pullRequests = Http::github()->get('repos/'.$site->repository.'/pulls')->json();
+                $pullRequests = Http::github()->get('repos/' . $site->repository . '/pulls')->json();
 
                 $matchingPullRequest = collect($pullRequests)->filter(function ($value) use ($splittedName) {
                     return $value['id'] === $splittedName[0];
                 })->first();
 
-                if (empty($pullRequests) || !$matchingPullRequest || $matchingPullRequest['state'] === 'closed') {
+                if (empty($pullRequests) || ! $matchingPullRequest || $matchingPullRequest['state'] === 'closed') {
                     $this->info('Deleting site ' . $site->name);
 
                     $site->delete();
@@ -82,7 +82,7 @@ class DeleteInactiveSites extends Command
 
                     $site->delete();
 
-                    if (!$stage) {
+                    if (! $stage) {
                         continue;
                     }
 

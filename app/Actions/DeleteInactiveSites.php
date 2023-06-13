@@ -12,7 +12,7 @@ class DeleteInactiveSites
         $sites = $server->sites();
         $delete = collect([]);
 
-        if (!$sites) {
+        if (! $sites) {
             return;
         }
 
@@ -21,13 +21,13 @@ class DeleteInactiveSites
 
             // The deployment is for the pull request
             if (is_numeric($splittedName[0])) {
-                $pullRequests = Http::github()->get('repos/'.$site->repository.'/pulls')->json();
+                $pullRequests = Http::github()->get('repos/' . $site->repository . '/pulls')->json();
 
                 $matchingPullRequest = collect($pullRequests)->filter(function ($value) use ($splittedName) {
                     return $value['id'] === $splittedName[0];
                 })->first();
 
-                if (empty($pullRequests) || !$matchingPullRequest || $matchingPullRequest->state === 'closed') {
+                if (empty($pullRequests) || ! $matchingPullRequest || $matchingPullRequest->state === 'closed') {
                     $delete->push($site->name);
                 }
             }

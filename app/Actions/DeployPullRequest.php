@@ -2,15 +2,15 @@
 
 namespace App\Actions;
 
-use Illuminate\Support\Facades\Http;
-use App\Support\Server;
 use App\Support\InitialDeployment;
+use App\Support\Server;
+use Illuminate\Support\Facades\Http;
 
 class DeployPullRequest
 {
     public function __invoke(Server $server, string $repository, string|int $number)
     {
-        $pullRequest = Http::github()->get('repos/rockero-cz/'. $repository .'/pulls/' . $number)->json();
+        $pullRequest = Http::github()->get('repos/rockero-cz/' . $repository . '/pulls/' . $number)->json();
 
         $domain = $pullRequest['id'] . '.dev.' . config('services.forge.domain');
 

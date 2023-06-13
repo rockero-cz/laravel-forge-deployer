@@ -37,7 +37,7 @@ Artisan::command('deploy:branch {repository} {branch}', function ($repository, $
 Artisan::command('deploy:pull {repository} {number}', function ($repository, $number) {
     (new DeployPullRequest)($repository, $number);
 
-    $pullRequest = Http::github()->get('repos/rockero-cz/'. $repository .'/pulls/' . $number)->json();
+    $pullRequest = Http::github()->get('repos/rockero-cz/' . $repository . '/pulls/' . $number)->json();
 
     $domain = "{$pullRequest['id']}.dev." . env('FORGE_DOMAIN');
     $this->info("Pull request #{$number} deployed at https://{$domain}");

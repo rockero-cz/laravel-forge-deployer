@@ -2,8 +2,8 @@
 
 namespace App\Actions;
 
-use App\Support\Server;
 use App\Support\InitialDeployment;
+use App\Support\Server;
 
 class DeployBranch
 {

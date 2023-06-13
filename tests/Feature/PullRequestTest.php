@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Support\Facades\Http;
 use Laravel\Forge\Forge;
 use Laravel\Forge\Resources\Site;
-use Tests\TestCase;
 use RuntimeException;
+use Tests\TestCase;
 
 class PullRequestTest extends TestCase
 {

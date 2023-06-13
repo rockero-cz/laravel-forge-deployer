@@ -68,14 +68,6 @@ class InitialDeployment
     }
 
     /**
-     * Prepare command argument.
-     */
-    private function prepareCommand(array|string $command): string
-    {
-        return "cd /home/forge/{$this->domain} && " . (is_array($command) ? implode(' && ', $command) : $command);
-    }
-
-    /**
      * Run the deployment.
      */
     public function run()
@@ -104,7 +96,7 @@ class InitialDeployment
             $env = $this->forge->siteEnvironmentFile($site->serverId, $site->id);
 
             foreach ($this->envReplacements as $key => $value) {
-                $env = preg_replace('/^'.$key.'=(.+)?/m', $key . '=' . $value, $env);
+                $env = preg_replace('/^' . $key . '=(.+)?/m', $key . '=' . $value, $env);
             }
 
             $this->forge->updateSiteEnvironmentFile($site->serverId, $site->id, $env);
@@ -141,6 +133,14 @@ class InitialDeployment
     {
         $deployments = $this->forge->get("servers/{$this->site->serverId}/sites/{$this->site->id}/deployment-history")['deployments'];
 
-        throw_if(!$deployments || $deployments[0]['status'] == 'failed');
+        throw_if(! $deployments || $deployments[0]['status'] == 'failed');
+    }
+
+    /**
+     * Prepare command argument.
+     */
+    private function prepareCommand(array|string $command): string
+    {
+        return "cd /home/forge/{$this->domain} && " . (is_array($command) ? implode(' && ', $command) : $command);
     }
 }

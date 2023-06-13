@@ -64,6 +64,6 @@ class Server
     {
         $deployments = $this->forge->deploymentHistory($this->serverId, $site->id)['deployments'];
 
-        return !empty($deployments) ? Carbon::parse($deployments[0]['ended_at']) : null;
+        return ! empty($deployments) ? Carbon::parse($deployments[0]['ended_at']) : null;
     }
 }

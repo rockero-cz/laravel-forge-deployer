@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\TestCase;
-use Laravel\Forge\Resources\Site;
 use Laravel\Forge\Forge;
+use Laravel\Forge\Resources\Site;
 use RuntimeException;
+use Tests\TestCase;
 
 class BranchDeploymentTest extends TestCase
 {

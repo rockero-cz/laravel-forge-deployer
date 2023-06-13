@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/webhook', WebhookController::class);
+Route::post('webhook', WebhookController::class);
 
 // Route::middleware(EnsureTokenIsValid::class)->group(function() {
 
