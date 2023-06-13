@@ -18,15 +18,12 @@ class DeployBranchAction
             'staging' => 'staging',
         };
 
-        // foo-bar.dev.rockero.cz
         $url = "{$repository}.{$environment}." . config('services.forge.domain');
+        $database = $environment . '_' . str_replace('-', '_', $repository);
 
         if ($site = $server->site($url)) {
             return $site->deploySite();
         }
-
-        // dev_foo_bar
-        $database = $environment . '_' . str_replace('-', '_', $repository);
 
         return app(InitialDeployAction::class)->run($url, $database, $repository, $branch);
     }
