@@ -18,6 +18,6 @@ class EnsureTokenIsValid
             return $next($request);
         }
 
-        return response()->redirectTo('/');
+        abort(403, 'Unauthorized');
     }
 }
