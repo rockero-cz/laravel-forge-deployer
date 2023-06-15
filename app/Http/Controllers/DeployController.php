@@ -36,4 +36,21 @@ class DeployController extends Controller
 
         return response()->json(['success' => true, 'site' => $site]);
     }
+
+    /**
+     * Handle deployment of the given event.
+     */
+    public function deployEvent(Server $server, string $repository, string $event): JsonResponse
+    {
+        $site = match ($event) {
+            'pull_request' => app(DeployPullRequestAction::class)->run($server, $repository, request()->input('number')),
+            default => app(DeployBranchAction::class)->run($server, $repository, request()->input('branch'))
+        };
+
+        if (! $site) {
+            return response()->json(['success' => false], 409);
+        }
+
+        return response()->json(['success' => true, 'site' => $site]);
+    }
 }

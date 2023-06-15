@@ -78,6 +78,7 @@ class InitialDeployment
             'domain' => $this->domain,
             'project_type' => 'php',
             'nginx_template' => 2972,
+            'database' => $this->database,
         ]);
 
         // Install repository

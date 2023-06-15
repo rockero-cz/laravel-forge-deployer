@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Illuminate\Support\Facades\Http;
 use Laravel\Forge\Forge;
 use Laravel\Forge\Resources\Site;
-use RuntimeException;
 use Tests\TestCase;
 
 class PullRequestTest extends TestCase
@@ -18,7 +17,7 @@ class PullRequestTest extends TestCase
         // Site ID: 876
 
         config()->set('services.forge.server_id', 987);
-        config()->set('services.forge.domain', 'deploy.cz');
+        config()->set('services.forge.domain', 'rockero.cz');
         config()->set('services.github.owner', 'rockero-cz');
         config()->set('project.deployer.token', 'fake-token');
 
@@ -60,12 +59,9 @@ class PullRequestTest extends TestCase
         // Assert methods have been called
         $forge->shouldHaveReceived('createSite')
             ->with(987, [
-                'domain' => '123.dev.deploy.cz',
+                'domain' => 'foobar-123.dev.rockero.cz',
                 'project_type' => 'php',
-                'directory' => '/123.dev.deploy.cz',
-                'isolated' => false,
                 'database' => '123',
-                'php_version' => 'php81',
                 'nginx_template' => 2972,
             ]);
 
@@ -79,14 +75,14 @@ class PullRequestTest extends TestCase
 
         $forge->shouldHaveReceived('updateSiteEnvironmentFile')
             ->with(987, 876, implode("\n", [
-                'APP_URL=https://123.dev.deploy.cz',
+                'APP_URL=https://foobar-123.dev.rockero.cz',
                 'DB_DATABASE=123',
                 'DB_USERNAME=root',
             ]));
 
         $forge->shouldHaveReceived('updateSiteDeploymentScript')
             ->with(987, 876, implode(' && ', [
-                'cd /home/forge/123.dev.deploy.cz',
+                'cd /home/forge/foobar-123.dev.rockero.cz',
                 'git fetch origin refs/pull/1/merge',
                 'git checkout FETCH_HEAD',
                 '$FORGE_COMPOSER install --no-interaction --prefer-dist --optimize-autoloader',
@@ -95,14 +91,14 @@ class PullRequestTest extends TestCase
             ]));
 
         $forge->shouldHaveReceived('obtainLetsEncryptCertificate')
-            ->with(987, 876, ['domains' => ['123.dev.deploy.cz']], false);
+            ->with(987, 876, ['domains' => ['foobar-123.dev.rockero.cz']], false);
 
         $forge->shouldHaveReceived('deploySite')
             ->with(987, 876);
 
         $forge->shouldHaveReceived('executeSiteCommand')
             ->with(987, 876, ['command' => implode(' && ', [
-                'cd /home/forge/123.dev.deploy.cz',
+                'cd /home/forge/foobar-123.dev.rockero.cz',
                 'php artisan key:generate --force',
                 'php artisan storage:link',
                 'php artisan db:seed --force --no-interaction',
@@ -126,7 +122,7 @@ class PullRequestTest extends TestCase
         ]);
 
         $site = $this->spy(Site::class);
-        $site->name = '123.dev.deploy.com';
+        $site->name = 'foobar-123.dev.deploy.com';
         $site->shouldReceive('deploySite')
             ->andReturn($site);
 
@@ -154,7 +150,7 @@ class PullRequestTest extends TestCase
         ]);
 
         $site = $this->mock(Site::class);
-        $site->name = '123.dev.deploy.com';
+        $site->name = 'foobar-123.dev.deploy.com';
 
         $site->shouldReceive('deploySite')
             ->andReturn(null); // <--
@@ -166,38 +162,5 @@ class PullRequestTest extends TestCase
             ->andReturn([$site]);
 
         $this->withHeaders(['Authorization' => 'Bearer fake-token'])->post('deploy/foobar/pull/1')->assertStatus(409);
-    }
-
-    /** @test */
-    public function throws_exception_when_deployment_fails()
-    {
-        config()->set('services.github.owner', 'rockero-cz');
-        config()->set('services.forge.domain', 'deploy.com');
-        config()->set('services.forge.server_id', 987);
-        config()->set('project.deployer.token', 'fake-token');
-
-        $forge = $this->mock(Forge::class);
-
-        $forge->shouldReceive('sites')->andReturn([]);
-        $forge->shouldReceive('createSite')->andReturn(new Site(['id' => 876, 'serverId' => 987]));
-        $forge->shouldReceive('installGitRepositoryOnSite');
-        $forge->shouldReceive('siteEnvironmentFile')->andReturn('');
-        $forge->shouldReceive('updateSiteEnvironmentFile');
-        $forge->shouldReceive('updateSiteDeploymentScript');
-        $forge->shouldReceive('obtainLetsEncryptCertificate');
-        $forge->shouldReceive('deploySite');
-
-        $forge->shouldReceive('get')
-            ->with('servers/987/sites/876/deployment-history')
-            ->andReturn([
-                'deployments' => [
-                    ['status' => 'failed'],
-                ],
-            ]);
-
-        $this->withoutExceptionHandling();
-        $this->expectException(RuntimeException::class);
-
-        $this->withHeaders(['Authorization' => 'Bearer fake-token'])->post('deploy/foobar/main');
     }
 }

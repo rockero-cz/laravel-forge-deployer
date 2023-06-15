@@ -15,13 +15,14 @@ class DeployPullRequestAction
     public function run(Server $server, string $repository, string|int $number): ?Site
     {
         $pullRequest = Http::github()->get('repos/' . config('services.github.owner') . '/' . $repository . '/pulls/' . $number)->json();
-        $url = $pullRequest['id'] . '.dev.' . config('services.forge.domain');
+        $pullRequestId = $pullRequest['id'];
+        $url = "{$repository}-{$pullRequestId}.dev." . config('services.forge.domain');
 
         if ($site = $server->site($url)) {
-            return $site->deploySite();
+            return $site->deploySite(false);
         }
 
-        $initialDeployment = new InitialDeployment($url, $pullRequest['id'], $repository, $pullRequest['base']['ref']);
+        $initialDeployment = new InitialDeployment($url, $pullRequestId, $repository, $pullRequest['base']['ref']);
         $site = $this->initialDeploy($initialDeployment, $number);
 
         // Post comment with domain on the github PR

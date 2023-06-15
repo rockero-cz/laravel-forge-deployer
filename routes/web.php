@@ -18,4 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(EnsureTokenIsValid::class)->group(function () {
     Route::post('deploy/{repository}/{branch}', [DeployController::class, 'deployBranch']);
     Route::post('deploy/{repository}/pull/{number}', [DeployController::class, 'deployPullRequest']);
+    Route::post('deploy/{repository}/event/{event}', [DeployController::class, 'deployEvent']);
 });

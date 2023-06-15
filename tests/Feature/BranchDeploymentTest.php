@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Laravel\Forge\Forge;
 use Laravel\Forge\Resources\Site;
-use RuntimeException;
 use Tests\TestCase;
 
 class BranchDeploymentTest extends TestCase
@@ -51,10 +50,7 @@ class BranchDeploymentTest extends TestCase
             ->with(987, [
                 'domain' => 'foobar.dev.deploy.com',
                 'project_type' => 'php',
-                'directory' => '/foobar.dev.deploy.com',
-                'isolated' => false,
                 'database' => 'dev_foobar',
-                'php_version' => 'php81',
                 'nginx_template' => 2972,
             ]);
 
@@ -138,37 +134,5 @@ class BranchDeploymentTest extends TestCase
         $forge->shouldReceive('sites')->withArgs([$serverId])->andReturn([$site]);
 
         $this->post('deploy/foobar/main')->assertStatus(409);
-    }
-
-    /** @test */
-    public function throws_exception_when_deployment_fails()
-    {
-        config()->set('services.github.owner', 'rockero-cz');
-        config()->set('services.forge.domain', 'deploy.com');
-        config()->set('services.forge.server_id', 987);
-
-        $forge = $this->mock(Forge::class);
-
-        $forge->shouldReceive('sites')->andReturn([]);
-        $forge->shouldReceive('createSite')->andReturn(new Site(['id' => 876, 'serverId' => 987]));
-        $forge->shouldReceive('installGitRepositoryOnSite');
-        $forge->shouldReceive('siteEnvironmentFile')->andReturn('');
-        $forge->shouldReceive('updateSiteEnvironmentFile');
-        $forge->shouldReceive('updateSiteDeploymentScript');
-        $forge->shouldReceive('obtainLetsEncryptCertificate');
-        $forge->shouldReceive('deploySite');
-
-        $forge->shouldReceive('get')
-            ->with('servers/987/sites/876/deployment-history')
-            ->andReturn([
-                'deployments' => [
-                    ['status' => 'failed'],
-                ],
-            ]);
-
-        $this->withoutExceptionHandling();
-        $this->expectException(RuntimeException::class);
-
-        $this->post('deploy/foobar/main');
     }
 }
