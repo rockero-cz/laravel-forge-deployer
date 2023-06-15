@@ -20,7 +20,7 @@ class DeployController extends Controller
             return response()->json(['success' => false], 409);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'site' => $site]);
     }
 
     /**
@@ -34,6 +34,6 @@ class DeployController extends Controller
             return response()->json(['success' => false], 409);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'site' => $site]);
     }
 }

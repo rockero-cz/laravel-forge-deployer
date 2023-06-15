@@ -23,7 +23,7 @@ class DeployBranchAction
         $database = $environment . '_' . str_replace('-', '_', $repository);
 
         if ($site = $server->site($url)) {
-            return $site->deploySite();
+            return $site->deploySite(false);
         }
 
         $initialDeployment = new InitialDeployment($url, $database, $repository, $branch);

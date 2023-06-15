@@ -9,9 +9,10 @@ class InitialDeployment
 {
     private Forge $forge;
 
-    private Site $site;
     private array $envReplacements;
+
     private string $deployScript;
+
     private string $postDeployCommand;
 
     public function __construct(
@@ -73,13 +74,9 @@ class InitialDeployment
     public function run(): ?Site
     {
         // Create site
-        $site = $this->site = $this->forge->createSite(config('services.forge.server_id'), [
+        $site = $this->forge->createSite(config('services.forge.server_id'), [
             'domain' => $this->domain,
             'project_type' => 'php',
-            'directory' => "/{$this->domain}",
-            'isolated' => false,
-            'database' => $this->database,
-            'php_version' => 'php81',
             'nginx_template' => 2972,
         ]);
 
@@ -113,9 +110,6 @@ class InitialDeployment
         // Run deployment script
         $this->forge->deploySite($site->serverId, $site->id);
 
-        // Throw exception if deployment failed
-        $this->ensureSiteIsDeployed();
-
         // Setup scheduler
         $this->forge->createJob($site->serverId, [
             'command' => "php8.1 /home/forge/{$this->domain}/artisan schedule:run",
@@ -129,13 +123,6 @@ class InitialDeployment
         }
 
         return $site;
-    }
-
-    public function ensureSiteIsDeployed(): void
-    {
-        $deployments = $this->forge->get("servers/{$this->site->serverId}/sites/{$this->site->id}/deployment-history")['deployments'];
-
-        throw_if(! $deployments || $deployments[0]['status'] == 'failed');
     }
 
     /**
